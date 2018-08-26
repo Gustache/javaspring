@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.gustache.cursomc.domain.Categoria;
 import com.gustache.cursomc.domain.Cidade;
+import com.gustache.cursomc.domain.Cliente;
+import com.gustache.cursomc.domain.Endereco;
 import com.gustache.cursomc.domain.Estados;
 import com.gustache.cursomc.domain.Produto;
+import com.gustache.cursomc.domain.enums.TipoCliente;
 import com.gustache.cursomc.repositories.CategoriaRepository;
 import com.gustache.cursomc.repositories.CidadeRepository;
+import com.gustache.cursomc.repositories.ClienteRepository;
+import com.gustache.cursomc.repositories.EnderecoRepository;
 import com.gustache.cursomc.repositories.EstadoRepository;
 import com.gustache.cursomc.repositories.ProdutoRepository;
 
@@ -26,6 +31,10 @@ public class CursomcApplication implements CommandLineRunner {
 	private EstadoRepository estadoRepository;
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -64,6 +73,16 @@ public class CursomcApplication implements CommandLineRunner {
 		estadoRepository.saveAll(Arrays.asList(est1, est2)); 
 		cidadeRepository.saveAll(Arrays.asList(c1, c2));
 		
+		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "30293093", TipoCliente.PESSOAFISICA);		
+		cli1.getTelefones().addAll(Arrays.asList("999566", "858585"));
+		
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "3837378", cli1, c1);
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 303", "Centro", "84784784", cli1, c2);
+		
+		cli1.getEndereco().addAll(Arrays.asList(e1,e2));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));		
 	}
 }
 
